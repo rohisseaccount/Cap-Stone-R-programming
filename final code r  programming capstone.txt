@@ -1,0 +1,21 @@
+library(forecast)
+
+energy_data <- read.csv("energy_data.csv")
+
+
+energy_data$timestamp <- as.POSIXct(energy_data$timestamp, format="%Y-%m-%d %H:%M:%S")
+
+
+ts_data <- ts(energy_data$consumption, frequency = 24)  # Assuming hourly data, change frequency accordingly
+
+
+arima_model <- auto.arima(ts_data)
+
+
+forecast_values <- forecast(arima_model, h = 24)  # Forecast for the next 24 hours, adjust h accordingly
+
+
+print(forecast_values)
+
+
+plot(forecast_values, main="Energy Consumption Forecast", xlab="Time", ylab="Consumption")
